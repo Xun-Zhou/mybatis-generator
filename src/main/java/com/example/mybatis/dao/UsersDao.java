@@ -1,14 +1,14 @@
 package com.example.mybatis.dao;
 
-import com.example.mybatis.annotation.MyBatisRepository;
 import com.example.mybatis.bean.Users;
 import java.util.Optional;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * @author admin
- * @date 2020年07月31日 17时51分08秒
+ * @date 2020年07月31日 18时15分36秒
  */
-@MyBatisRepository
+@Mapper
 public interface UsersDao {
     /**
      * 删除

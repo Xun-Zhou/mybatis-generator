@@ -21,9 +21,7 @@ public class LombokPlugin extends PluginAdapter {
 
     private static final String AUTHOR = "author";
 
-    private static final String DAO_ANNOTATION_PATH = "daoAnnotationPath";
-
-    private static final String DAO_ANNOTATION_NAME = "daoAnnotationName";
+    private static final String DAO_ANNOTATION = "daoAnnotation";
 
     private String supperClass;
 
@@ -50,12 +48,8 @@ public class LombokPlugin extends PluginAdapter {
         return properties.getProperty(AUTHOR);
     }
 
-    private String getDaoAnnotationPath() {
-        return properties.getProperty(DAO_ANNOTATION_PATH);
-    }
-
-    private String getDaoAnnotationName() {
-        return properties.getProperty(DAO_ANNOTATION_NAME);
+    private String getDaoAnnotation() {
+        return properties.getProperty(DAO_ANNOTATION);
     }
 
     private static String camelToUnderline(String fieldName) {
@@ -132,14 +126,20 @@ public class LombokPlugin extends PluginAdapter {
 
     @Override
     public boolean clientGenerated(Interface interfaze, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
+        // dao注释
         interfaze.addJavaDocLine("/**");
         interfaze.addJavaDocLine(" * @author " + getAuthor());
         interfaze.addJavaDocLine(" * @date " + this.getDateString());
         interfaze.addJavaDocLine(" */");
-        FullyQualifiedJavaType importedType = new FullyQualifiedJavaType(getDaoAnnotationPath());
+        // dao注解
+        String annotationPath = getDaoAnnotation();
+        FullyQualifiedJavaType importedType = new FullyQualifiedJavaType(annotationPath);
         interfaze.addImportedType(importedType);
+        String annotationName = annotationPath.substring(annotationPath.lastIndexOf(".") + 1);
+        interfaze.addAnnotation("@" + annotationName);
+        // 引入Optional依赖
         interfaze.addImportedType(new FullyQualifiedJavaType("java.util.Optional"));
-        interfaze.addAnnotation(getDaoAnnotationName());
+        // 默认生成方法注释
         List<Method> methods = interfaze.getMethods();
         for (Method method : methods) {
             switch (method.getName()) {
@@ -209,6 +209,7 @@ public class LombokPlugin extends PluginAdapter {
 
     @Override
     public boolean clientSelectByPrimaryKeyMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable) {
+        // SelectByPrimaryKey方法返回值设置为 Optional<?>
         FullyQualifiedJavaType fullyQualifiedJavaType = new FullyQualifiedJavaType("java.util.Optional");
         String domainObjectName = getDomainObjectName(introspectedTable);
         String domainObjectPath = getDomainTargetPackage() + "." + domainObjectName;

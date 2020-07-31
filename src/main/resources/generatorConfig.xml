@@ -20,9 +20,7 @@
             <!-- 忽略字段 -->
             <property name="ignoreFields" value="id,createBy,createTime,updateBy,updateTime,isDeleted"/>
             <!-- dao注解path -->
-            <property name="daoAnnotationPath" value="com.example.mybatis.annotation.MyBatisRepository"/>
-            <!-- dao注解名称 -->
-            <property name="daoAnnotationName" value="@MyBatisRepository"/>
+            <property name="daoAnnotation" value="org.apache.ibatis.annotations.Mapper"/>
             <!-- author -->
             <property name="author" value="admin"/>
         </plugin>
