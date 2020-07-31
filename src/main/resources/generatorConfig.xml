@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+
+    <context id="MySql" defaultModelType="flat" targetRuntime="MyBatis3">
+        <!-- 代码格式  -->
+        <property name="javaFormatter" value="org.mybatis.generator.api.dom.DefaultJavaFormatter"/>
+
+        <!-- 此处是将UserMapper改名为UserDao 接口  -->
+        <plugin type="org.mybatis.generator.plugins.RenameJavaMapperPlugins">
+            <property name="searchString" value="Mapper$"/>
+            <property name="replaceString" value="Dao"/>
+        </plugin>
+
+        <plugin type="org.mybatis.generator.plugins.LombokPlugin">
+            <!-- 实体父类 -->
+            <property name="supperClass" value="com.example.mybatis.bean.BaseEntity"/>
+            <!-- 忽略字段 -->
+            <property name="ignoreFields" value="id,createBy,createTime,updateBy,updateTime,isDeleted"/>
+            <!-- dao注解path -->
+            <property name="daoAnnotationPath" value="com.example.mybatis.annotation.MyBatisRepository"/>
+            <!-- dao注解名称 -->
+            <property name="daoAnnotationName" value="@MyBatisRepository"/>
+            <!-- author -->
+            <property name="author" value="admin"/>
+        </plugin>
+
+        <!-- 取消默认注释 -->
+        <commentGenerator>
+            <property name="suppressDate" value="false"/>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <!-- 必须 映射数据库配置 -->
+        <jdbcConnection
+                driverClass="com.mysql.jdbc.Driver"
+                connectionURL="jdbc:mysql://localhost:3306/localhost?tinyInt1isBit=false&amp;serverTimezone=UTC"
+                userId="root"
+                password="root"/>
+
+        <!-- 生成实体类对象，放在工程src/main/java层级的com.ningmeng.generator包下  targetPackage不存在会自动创建，targetProject不存在则不自动创建，所以必须指明已存在的路径 -->
+        <javaModelGenerator targetPackage="com.example.mybatis.bean" targetProject="src/main/java"/>
+
+        <!-- 生成mapper xml文件，并放到resources下的mapper文件夹下 -->
+        <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources"/>
+
+        <!-- 生成dao接口，放在com.ningmeng.generator.mapper包下-->
+        <javaClientGenerator targetPackage="com.example.mybatis.dao" targetProject="src/main/java"
+                             type="XMLMAPPER"/>
+
+        <!-- 数据库表 -->
+        <table tableName="local_users" domainObjectName="Users"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false">
+            <columnOverride column="user_sex" javaType="Integer"/>
+        </table>
+    </context>
+</generatorConfiguration>
