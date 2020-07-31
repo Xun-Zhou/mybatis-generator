@@ -1,5 +1,6 @@
 package com.example.mybatis.bean;
 
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -7,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * @author admin
- * @date 2020年07月31日 16时51分06秒
+ * @date 2020年07月31日 17时51分08秒
  */
 @Data
 @NoArgsConstructor
